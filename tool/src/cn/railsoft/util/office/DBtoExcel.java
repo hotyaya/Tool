@@ -16,7 +16,6 @@ import cn.railsoft.util.db.mapping.VtablesDAO;
 public class DBtoExcel {
 	@SuppressWarnings("rawtypes")
 	public static void main(String[] args) {
-		Vtables co = null;
 		VtablesDAO dao = new VtablesDAO();
 		List list = dao.findAll();
 		Iterator iter = list.iterator();
@@ -27,12 +26,23 @@ public class DBtoExcel {
 		try {
 			fileOut = new FileOutputStream(out);
 			Sheet sheet = wbOut.createSheet("输出结果");
+			//Sheet sheet = wbOut.getSheet("输出结果");
+			
+			// 创建一个单元格并填充一个整数的值
+			Row row1 = sheet.createRow(0);
+			Cell cellz = row1.createCell(0);
+			cellz.setCellValue("id");
+			Cell cell1z = row1.createCell(1);
+			cell1z.setCellValue("tableName");
+			Cell cell2z = row1.createCell(2);
+			cell2z.setCellValue("tableRows");
+			
 			int i=0;
 			while (iter.hasNext()) {
 				Object o = iter.next();
 				if (o instanceof Vtables && o!=null){
 					i++;
-					co = ((Vtables)o);
+					Vtables co = ((Vtables)o);
 					// 创建一行并放一些单元格到该行中，行的索引是以0开始的
 					Row row = sheet.createRow(i);
 					// 创建一个单元格并填充一个整数的值
@@ -45,6 +55,8 @@ public class DBtoExcel {
 					System.out.println(""+i);
 				}
 			}
+
+			
 			wbOut.write(fileOut);
 			fileOut.close();
 		} catch (FileNotFoundException e) {
